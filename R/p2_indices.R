@@ -24,6 +24,15 @@
 #' 
 #' @export
 #'
+#' @details
+#' This function is adapted from the \href{https://github.com/ET-NCMP/NCMP}{ET-NCMP/NCMP} and modified for use in R-Instat.
+#' The modifications include changes to data input and output processes while preserving the core calculation methods.
+#' The function calculates various climate indices for each station in the given data frame.It requires daily climate data,
+#' including maximum temperature (tmax), minimum temperature (tmin),and precipitation (precip). The function calculates monthly 
+#' and annual indices, including mean temperature,temperature anomalies, precipitation totals, precipitation anomalies, 
+#' standardized precipitation index (SPI),and various temperature percentiles. The climatology is defined by 
+#' the \code{nybr} (start year) and \code{nyer} (end year) parameters.
+#' 
 #' @examples
 #' # Example usage:
 #' # indices_result <- p2_indices(df = climate_data, station = "StationID", date = "Date",
@@ -32,17 +41,8 @@
 #'                             station_df = station_metadata, name = "StationName",
 #'                             lat = "Latitude", lon = "Longitude")
 #' 
-#' @details
-#' This function is adapted from the ET-NCMP/NCMP project (https://github.com/ET-NCMP/NCMP) and modified for use in R-Instat.
-#' The modifications include changes to data input and output processes while preserving the core calculation methods.
-#' The function calculates various climate indices for each station in the given data frame.It requires daily climate data,
-#' including maximum temperature (tmax), minimum temperature (tmin),and precipitation (precip). The function calculates monthly 
-#' and annual indices, including mean temperature,temperature anomalies, precipitation totals, precipitation anomalies, 
-#' standardized precipitation index (SPI),and various temperature percentiles. The climatology is defined by 
-#' the \code{nybr} (start year) and \code{nyer} (end year) parameters.
-#' 
 #' @references reference
-#' For the original source code and more information, please refer to: https://github.com/ET-NCMP/NCMP
+#' For the original source code and more information, please refer to: \href{https://github.com/ET-NCMP/NCMP}{ET-NCMP/NCMP}
 #' 
 p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0, nybr = 1981, nyer = 2010,
                        station_df, name, lat, lon) {

@@ -59,7 +59,7 @@ using daily climate data.The indices include mean temperature, temperature anoma
 precipitation anomalies, standardized precipitation index (SPI), and various temperature percentiles.
 }
 \details{
-This function is adapted from the ET-NCMP/NCMP project (https://github.com/ET-NCMP/NCMP) and modified for use in R-Instat.
+This function is adapted from the \href{https://github.com/ET-NCMP/NCMP}{ET-NCMP/NCMP} and modified for use in R-Instat.
 The modifications include changes to data input and output processes while preserving the core calculation methods.
 The function calculates various climate indices for each station in the given data frame.It requires daily climate data,
 including maximum temperature (tmax), minimum temperature (tmin),and precipitation (precip). The function calculates monthly
@@ -78,5 +78,5 @@ the \code{nybr} (start year) and \code{nyer} (end year) parameters.
 }
 \references{
 reference
-For the original source code and more information, please refer to: https://github.com/ET-NCMP/NCMP
+For the original source code and more information, please refer to: \href{https://github.com/ET-NCMP/NCMP}{ET-NCMP/NCMP}
 }
