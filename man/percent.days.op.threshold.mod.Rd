@@ -20,7 +20,7 @@ A numeric vector containing the calculated percent days diagnostics.
 This function calculates percent days diagnostics when there is an insufficient number of years available for analysis.
 }
 \details{
-This function is adapted from the ET-NCMP/NCMP project (https://github.com/ET-NCMP/NCMP) and modified for use in R-Instat.
+This function is adapted from the \href{https://github.com/ET-NCMP/NCMP/}{ET-NCMP/NCMP project} and modified for use in R-Instat.
 It specifically corrects the calculation of percent days diagnostics in cases where there are too few years of data.
 Previous versions generated warnings and unrealistic negative bias in the estimated values.
 The modifications include changes to data input and output processes while preserving the core calculation methods.
@@ -35,5 +35,5 @@ This function directly calculates percent days diagnostics and circumvents most 
 
 }
 \references{
-For the original source code and more information, please refer to: https://github.com/ET-NCMP/NCMP
+For the original source code and more information, please refer to: \href{https://github.com/ET-NCMP/NCMP/}{ET-NCMP/NCMP project}
 }
