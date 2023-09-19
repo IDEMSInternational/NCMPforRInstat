@@ -2,4 +2,5 @@
 
 export("%>%")
 export(p2_indices)
+export(percent.days.op.threshold.mod)
 importFrom(magrittr,"%>%")
