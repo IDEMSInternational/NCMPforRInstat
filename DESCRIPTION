@@ -10,4 +10,12 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
-    magrittr
+    magrittr,
+    PCICt,
+    climdex.pcic,
+    data.table,
+    dplyr,
+    lubridate,
+    sp,
+    tidyr,
+    tidyselect
