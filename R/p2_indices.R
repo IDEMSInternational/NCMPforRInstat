@@ -16,7 +16,7 @@
 #' @param nybr The start year for the climatological period.
 #' @param nyer The end year for the climatological period.
 #' @param station_df A data.frame containing station metadata.
-#' @param name The name of the station column in station data frame (to link with df[[station]]).
+#' @param name The name of the station column in station data frame (to link with df).
 #' @param lat The name of the latitude column in station data frame.
 #' @param lon The name of the longitude column in station data frame.
 #'
@@ -36,10 +36,10 @@
 #' @examples
 #' # Example usage:
 #' # indices_result <- p2_indices(df = climate_data, station = "StationID", date = "Date",
-#'                             precip = "Precipitation", tmax = "MaxTemperature",
-#'                             tmin = "MinTemperature", qcpr = 2, nybr = 1981, nyer = 2010,
-#'                             station_df = station_metadata, name = "StationName",
-#'                             lat = "Latitude", lon = "Longitude")
+#' #                           precip = "Precipitation", tmax = "MaxTemperature",
+#' #                            tmin = "MinTemperature", qcpr = 2, nybr = 1981, nyer = 2010,
+#' #                            station_df = station_metadata, name = "StationName",
+#' #                            lat = "Latitude", lon = "Longitude")
 #' 
 #' @references reference
 #' For the original source code and more information, please refer to: \href{https://github.com/ET-NCMP/NCMP}{ET-NCMP/NCMP}
