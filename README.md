@@ -22,5 +22,5 @@ You can install the development version of NCMPforRInstat from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("lilyclements/NCMPforRInstat")
+devtools::install_github("IDEMSInternational/NCMPforRInstat")
 ```
