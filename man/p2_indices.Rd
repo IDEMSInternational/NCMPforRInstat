@@ -44,7 +44,7 @@ p2_indices(
 
 \item{station_df}{A data.frame containing station metadata.}
 
-\item{name}{The name of the station column in station data frame (to link with df[\link{station}]).}
+\item{name}{The name of the station column in station data frame (to link with df).}
 
 \item{lat}{The name of the latitude column in station data frame.}
 
@@ -70,10 +70,10 @@ the \code{nybr} (start year) and \code{nyer} (end year) parameters.
 \examples{
 # Example usage:
 # indices_result <- p2_indices(df = climate_data, station = "StationID", date = "Date",
-                            precip = "Precipitation", tmax = "MaxTemperature",
-                            tmin = "MinTemperature", qcpr = 2, nybr = 1981, nyer = 2010,
-                            station_df = station_metadata, name = "StationName",
-                            lat = "Latitude", lon = "Longitude")
+#                           precip = "Precipitation", tmax = "MaxTemperature",
+#                            tmin = "MinTemperature", qcpr = 2, nybr = 1981, nyer = 2010,
+#                            station_df = station_metadata, name = "StationName",
+#                            lat = "Latitude", lon = "Longitude")
 
 }
 \references{
