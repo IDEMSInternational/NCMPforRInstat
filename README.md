@@ -24,3 +24,14 @@ You can install the development version of NCMPforRInstat from
 # install.packages("devtools")
 devtools::install_github("IDEMSInternational/NCMPforRInstat")
 ```
+
+## References
+
+These files have been obtained from
+[ET-NCMP/NCMP](https://github.com/ET-NCMP/NCMP) and modified for use in
+R-Instat. Modifications have been made to the data input and output
+processes while carefully maintaining consistent calculations processes
+as in the original files.
+
+The R-NCMPs package has been developed by the ET-NCMP. This program
+assembles the NCMPs to be sent to WMO.
