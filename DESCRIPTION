@@ -21,7 +21,7 @@ Imports:
     sp,
     tidyr,
     tidyselect,
-    rlang (>= 0.4.11)
+    rlang (>= 0.4.11),
     utils,
     stats,
     methods,
