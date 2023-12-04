@@ -70,11 +70,11 @@ the \code{nybr} (start year) and \code{nyer} (end year) parameters.
 \examples{
 # Example usage:
 # indices_result <- p2_indices(df = climate_data, station = "StationID", date = "Date",
-                            precip = "Precipitation", tmax = "MaxTemperature",
-                            tmin = "MinTemperature", qcpr = 2, nybr = 1981, nyer = 2010,
-                            station_df = station_metadata, name = "StationName",
-                            lat = "Latitude", lon = "Longitude")
-
+#                             precip = "Precipitation", tmax = "MaxTemperature",
+#                             tmin = "MinTemperature", qcpr = 2, nybr = 1981, nyer = 2010,
+#                             station_df = station_metadata, name = "StationName",
+#                             lat = "Latitude", lon = "Longitude")
+# 
 }
 \references{
 reference

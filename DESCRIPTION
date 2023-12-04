@@ -12,12 +12,17 @@ RoxygenNote: 7.2.3
 Imports: 
     magrittr,
     PCICt,
+    maps,
+    zyp,
     climdex.pcic,
     data.table,
     dplyr,
     lubridate,
     sp,
     tidyr,
-    tidyselect
+    tidyselect,
+    rlang (>= 0.4.11)
 Remotes:
     pacificclimate/climdex.pcic
+Suggests: 
+    roxygen2
