@@ -138,11 +138,12 @@ p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0,
     # Copy for creating monthly values
     data1 <- data
     data1$Prec[data1$Prec < 1] <- 0  # replace prec less than 1 with 0
-    
+    Mo <- data1$Mo
+    Prec <- data1$Prec
+    Year <- data1$Year
     # Calculate monthly values where missing days are below the threshold
     # Would be desirable to allow for leap years, but this would be rather harder
     # as need to account for partial months and years 
-    Mo <- data1$Mo
     Month <- data1[,list(
       Pr = ifelse(Days[Mo] - sum(!is.na(Prec)) > missm, NA_real_, sum(Prec, na.rm=TRUE)),
       Tm = ifelse(Days[Mo] - sum(!is.na(Tm)) > missm, NA_real_, mean(Tm, na.rm=TRUE))),
