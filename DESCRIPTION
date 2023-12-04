@@ -21,6 +21,8 @@ Imports:
     sp,
     tidyr,
     tidyselect,
-    rlang
+    rlang (>= 0.4.11)
 Remotes:
     pacificclimate/climdex.pcic
+Suggests: 
+    roxygen2
