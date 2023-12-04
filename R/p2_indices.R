@@ -16,7 +16,7 @@
 #' @param nybr The start year for the climatological period.
 #' @param nyer The end year for the climatological period.
 #' @param station_df A data.frame containing station metadata.
-#' @param name The name of the station column in station data frame (to link with df[[station]]).
+#' @param name The name of the station column in station data frame (to link with df).
 #' @param lat The name of the latitude column in station data frame.
 #' @param lon The name of the longitude column in station data frame.
 #'
@@ -36,11 +36,11 @@
 #' @examples
 #' # Example usage:
 #' # indices_result <- p2_indices(df = climate_data, station = "StationID", date = "Date",
-#' #                             precip = "Precipitation", tmax = "MaxTemperature",
-#' #                             tmin = "MinTemperature", qcpr = 2, nybr = 1981, nyer = 2010,
-#' #                             station_df = station_metadata, name = "StationName",
-#' #                             lat = "Latitude", lon = "Longitude")
-#' # 
+#' #                           precip = "Precipitation", tmax = "MaxTemperature",
+#' #                            tmin = "MinTemperature", qcpr = 2, nybr = 1981, nyer = 2010,
+#' #                            station_df = station_metadata, name = "StationName",
+#' #                            lat = "Latitude", lon = "Longitude")
+#' 
 #' @references reference
 #' For the original source code and more information, please refer to: \href{https://github.com/ET-NCMP/NCMP}{ET-NCMP/NCMP}
 #' 
@@ -54,8 +54,7 @@ p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0,
   # generating NCMPs and may differ from other standards or guidulines              #
   # ***** DO NOT CHANGE THE VALUE OF THESE VARIABLES *****                          #
   ###################################################################################
-  month_name_english <- c("January", "February", "March", "April", "May", "June", "July", 
-                          "August", "September", "October", "November", "December")
+  
   stnhi <- 200L  # maximum number of stations
   yrlo <- 1900L  # earliest possible year for reference period
   yrhi <- as.POSIXlt(Sys.time())$year + 1899L # latest possible year == current - 1
@@ -90,6 +89,9 @@ p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0,
   ###################################################################################
   
   max.miss <- c(monthly = missm, annual = missa)  # for climdexInput.raw
+  
+  month_name_english <- c("January", "February", "March", "April", "May", "June", "July", 
+                          "August", "September", "October", "November", "December")
   
   # Output column names (now standard across CSV files)
   cnames <- c("Year", month_name_english, "Annual")
@@ -147,14 +149,12 @@ p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0,
     # Would be desirable to allow for leap years, but this would be rather harder
     # as need to account for partial months and years 
     
-    Month <- data1[,.(
+    Month <- data1[,list(
       Pr = ifelse(Days[Mo] - sum(!is.na(Prec)) > missm, NA_real_, sum(Prec, na.rm=TRUE)),
-      Tm = ifelse(Days[Mo] - sum(!is.na(Tm)) > missm, NA_real_, mean(Tm, na.rm=TRUE))), by = .(Year, Mo)]
+      Tm = ifelse(Days[Mo] - sum(!is.na(Tm)) > missm, NA_real_, mean(Tm, na.rm=TRUE))), by = list(Year, Mo)]
     
-    print("A")
-    print(Month)
     # Calculate annual value where missing days are below the threshold
-    Year <- data1[,.(
+    Year <- data1[,list(
       Pr.Y = ifelse(365L - sum(!is.na(Prec)) > missa, NA_real_, sum(Prec, na.rm = TRUE)),
       Tm.Y = ifelse(365L - sum(!is.na(Tm)) > missa, NA_real_, mean(Tm, na.rm = TRUE))), by = Year]
     
@@ -269,7 +269,7 @@ p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0,
     Gamma.Prob <- apply(Prec2, 1, stats::pgamma, shape = Alpha, scale = Beta)   # Implicit over rows
     Prob <- PZero+(1-PZero)*Gamma.Prob         # normalize with prob of zero; bet 0-1
     SPI <- round(stats::qnorm(Prob, mean = 0, sd = 1), 1) # input prob into normal quantile func bet -3-3
-    SPI <- cbind(Prec[,.(Year)], t(SPI))
+    SPI <- cbind(Prec[,list(Year)], t(SPI))
     
     SPI_stack <- tidyr::pivot_longer(SPI, cols = 2:14, names_to = "month",
                                      names_ptypes = list(month = factor(levels = cnames[2:14])),
@@ -334,12 +334,12 @@ p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0,
     # Retain only the Day and value in each row (or add dateMD/DY if used)
     # If extreme monthly precipitation is zero, sensible to set day index to missing
     
-    RX1X <- data[,.SD[which.max(Prec),.(Day,Prec)], by = .(Year,Mo)]
+    RX1X <- data[,.SD[which.max(Prec),list(Day,Prec)], by = list(Year,Mo)]
     RX1X[,Day := ifelse(RX1X[,Prec] == 0, NA, RX1X[,Day])]
-    TxXX <- data[,.SD[which.max(Tx),.(Day,Tx)], by = .(Year,Mo)]
-    TnXX <- data[,.SD[which.max(Tn),.(Day,Tn)], by = .(Year,Mo)]
-    TxNN <- data[,.SD[which.min(Tx),.(Day,Tx)], by = .(Year,Mo)]
-    TnNN <- data[,.SD[which.min(Tn),.(Day,Tn)], by = .(Year,Mo)]
+    TxXX <- data[,.SD[which.max(Tx),list(Day,Tx)], by = list(Year,Mo)]
+    TnXX <- data[,.SD[which.max(Tn),list(Day,Tn)], by = list(Year,Mo)]
+    TxNN <- data[,.SD[which.min(Tx),list(Day,Tx)], by = list(Year,Mo)]
+    TnNN <- data[,.SD[which.min(Tn),list(Day,Tn)], by = list(Year,Mo)]
     
     # If no data, set all index values to missing - use a dummy table for all cases
     # This does not appear to be working as intended, given the observed issues
@@ -371,13 +371,13 @@ p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0,
         # Also extract month and value for absolute extreme (ie over all days in data)
         
         if (ne <= 3L) {
-          MVarX <- VarX[,.SD[which.max(Var)],by=.(Mo)]
-          YVarX <- VarX[,.SD[which.max(Var)],by=.(Year)]
-          Var.MY <- as.numeric(VarX[,.SD[which.max(Var),.(Mo,Var)]])
+          MVarX <- VarX[,.SD[which.max(Var)],by=list(Mo)]
+          YVarX <- VarX[,.SD[which.max(Var)],by=list(Year)]
+          Var.MY <- as.numeric(VarX[,.SD[which.max(Var),list(Mo,Var)]])
         } else {
-          MVarX <- VarX[,.SD[which.min(Var)],by=.(Mo)]
-          YVarX <- VarX[,.SD[which.min(Var)],by=.(Year)]
-          Var.MY <- as.numeric(VarX[,.SD[which.min(Var),.(Mo,Var)]])
+          MVarX <- VarX[,.SD[which.min(Var)],by=list(Mo)]
+          YVarX <- VarX[,.SD[which.min(Var)],by=list(Year)]
+          Var.MY <- as.numeric(VarX[,.SD[which.min(Var),list(Mo,Var)]])
         }
         
         # Combine monthly and annual records - do need to worry about the table order
@@ -393,7 +393,7 @@ p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0,
         Var.D <- VarX.all[,colD, with = FALSE]
         # DP Replaced month.abb with 1:12 so that annual value can be stacked with month values.
         # DP May need to convert back to month.abb in other scripts that use this.
-        Var.D$Annual <- (1:12)[as.matrix(VarX.all[,.(Mo)])]
+        Var.D$Annual <- (1:12)[as.matrix(VarX.all[,list(Mo)])]
         
         # Add monthly row to output: year of extreme to index, value to data
         # This is somewhat murky - and putting month/extreme of extreme in "annual"
