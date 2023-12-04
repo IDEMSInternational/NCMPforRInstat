@@ -144,6 +144,7 @@ p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0,
     # Would be desirable to allow for leap years, but this would be rather harder
     # as need to account for partial months and years 
     print("A")
+    print(head(data1))
     Month <- data1[,list(
       Pr = ifelse(Days[Mo] - sum(!is.na(Prec)) > missm, NA_real_, sum(Prec, na.rm=TRUE)),
       Tm = ifelse(Days[Mo] - sum(!is.na(Tm)) > missm, NA_real_, mean(Tm, na.rm=TRUE))),
