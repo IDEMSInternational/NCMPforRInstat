@@ -149,11 +149,12 @@ p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0,
     print("B")
     print(head(data1))
     print("C")
-    Month <- data1[,list(
+    Month <- data1[,.(
       Pr = ifelse(Days[Mo] - sum(!is.na(Prec)) > missm, NA_real_, sum(Prec, na.rm=TRUE)),
-      Tm = ifelse(Days[Mo] - sum(!is.na(Tm)) > missm, NA_real_, mean(Tm, na.rm=TRUE))), by = list(Year, Mo)]
-    #print(Month)
+      Tm = ifelse(Days[Mo] - sum(!is.na(Tm)) > missm, NA_real_, mean(Tm, na.rm=TRUE))),
+      by = .(Year, Mo)]
     print("D")
+    print(Month)
     # Calculate annual value where missing days are below the threshold
     Year <- data1[,list(
       Pr.Y = ifelse(365L - sum(!is.na(Prec)) > missa, NA_real_, sum(Prec, na.rm = TRUE)),
