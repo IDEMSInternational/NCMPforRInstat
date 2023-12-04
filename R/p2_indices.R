@@ -128,7 +128,6 @@ p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0,
                                    Tx = data[[tmax]],
                                    Tn = data[[tmin]]
     )
-    print(head(data))
     ###################################################################################
     #    Find mean temperature and monthly values                                     #
     ###################################################################################
@@ -143,10 +142,7 @@ p2_indices <- function(df, station, date, precip, tmax, tmin, qct = 0, qcpr = 0,
     # Calculate monthly values where missing days are below the threshold
     # Would be desirable to allow for leap years, but this would be rather harder
     # as need to account for partial months and years 
-    print("A")
-    print(head(data1))
-    print(Mo)
-    print(Days)
+    Mo <- data1$Mo
     Month <- data1[,list(
       Pr = ifelse(Days[Mo] - sum(!is.na(Prec)) > missm, NA_real_, sum(Prec, na.rm=TRUE)),
       Tm = ifelse(Days[Mo] - sum(!is.na(Tm)) > missm, NA_real_, mean(Tm, na.rm=TRUE))),
