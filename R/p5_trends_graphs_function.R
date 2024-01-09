@@ -18,7 +18,7 @@
 #' @param nye (optional) end year for station trend (if missing will use nyea)
 #' @param ncmp_folder directory to output graphs and maps. ncmp_folder/A5_Trends_Graphs will be created for output.
 #' @param station_df data.frame will station metadata
-#' @param name name of station column in station_df (to link with a2)
+#' @param name name of station column in station_df (to link with a2[[station]])
 #' @param lat name of latitude column in station_df
 #' @param lon name of longitude column in station_df
 #'
@@ -37,9 +37,8 @@
 #' 
 #' @examples
 #' # Example usage of 'p5_trends_graphs':
-#' # p5_trends_graphs(a2, station = "StationID", a2_year = "Year", month = "Month",
-#' #                  a4, a4_year = "Year", a4_month = "Month",ne = 1:8, nyba = 1950,
-#' #                  nyea = 2020, nyb = 1960, nye = 2020, ncmp_folder = "output_folder",
+#' # p5_trends_graphs(a2, station = "StationID", a2_year = "Year", month = "Month", a4, a4_year = "Year", a4_month = "Month",
+#' #                ne = 1:8, nyba = 1950, nyea = 2020, nyb = 1960, nye = 2020, ncmp_folder = "output_folder",
 #' #                station_df, name = "StationName", lat = "Latitude", lon = "Longitude")
 #' 
 #' @references
@@ -199,8 +198,8 @@ p5_trends_graphs <- function(a2, station, a2_year, month, a4, a4_year, a4_month,
   for (i in 1:nstn) {
     # Open PDF for plots
     
-    grDevices::pdf(namep[i], width = 7, height = 5)
-    graphics::par(mfrow = c(2,2), mar = c(3, 3, 2, 0.5) + 0.1, mgp = c(2, 0.5, 0), tcl = -0.25, las = 1)
+    pdf(namep[i], width = 7, height = 5)
+    par(mfrow = c(2,2), mar = c(3, 3, 2, 0.5) + 0.1, mgp = c(2, 0.5, 0), tcl = -0.25, las = 1)
     
     ###################################################################################
     # Begins loop for indices                                                         #
@@ -248,7 +247,7 @@ p5_trends_graphs <- function(a2, station, a2_year, month, a4, a4_year, a4_month,
         # Only plot trend line if it has been estimated
         
         if (!is.na(trend[j])) {
-          graphics::abline(q[c('intercept', 'trend')], col = "Red", lty = 2)
+          abline(q[c('intercept', 'trend')], col = "Red", lty = 2)
           #        abline(q[,1],col="Red",lty=2)
         }
       }
@@ -259,7 +258,7 @@ p5_trends_graphs <- function(a2, station, a2_year, month, a4, a4_year, a4_month,
     ###################################################################################
     # Close PDF file
     
-    grDevices::dev.off()
+    dev.off()
     
     # Copy trend and p-value into output table
     # Currently converting p-value into "y"/"n" significance flag - should this be changed?
@@ -279,7 +278,7 @@ p5_trends_graphs <- function(a2, station, a2_year, month, a4, a4_year, a4_month,
   
   X_trend <- tidyr::pivot_longer(X, cols = seq(2, 32, 2), names_to = "ncmp_index",
                                  values_to = "trend")
-  X_trend <- X_trend %>% dplyr::select(Station, ncmp_index, trend)
+  X_trend <- X_trend %>% select(Station, ncmp_index, trend)
   X_pvalue <- tidyr::pivot_longer(X, cols = seq(3, 33, 2), names_to = "ncmp_index",
                                   values_to = "signif")
   X_out <- X_trend
@@ -351,11 +350,11 @@ p5_trends_graphs <- function(a2, station, a2_year, month, a4, a4_year, a4_month,
   
   # Plot the station locations
   
-  grDevices::jpeg(mapf[1])
+  jpeg(mapf[1])
   maps::map(wmap, xlim = xlim, ylim = ylim, col = "gray80", fill = TRUE)  # grey fill of continents
-  graphics::points(Dt[,3], Dt[,2], pch = 16, col = "Red", cex = 1.0)          # dots of lat/long (check size)
+  points(Dt[,3], Dt[,2], pch = 16, col = "Red", cex = 1.0)          # dots of lat/long (check size)
   title(main = "Stn locations")                                     # map title
-  grDevices::dev.off()
+  dev.off()
   
   # Changed to plot all (16) indices - need to test the last 4
   # The plot titles may need modification
@@ -366,10 +365,10 @@ p5_trends_graphs <- function(a2, station, a2_year, month, a4, a4_year, a4_month,
     Cr <- Colour(Dt[, 2 * i + 2], i)          # Colour of all triangles
     Bg <- Back(Dt[, 2 * i + 2],Dt[,2 * i + 3], i) # Fill of all triangles (if significant)
     
-    grDevices::jpeg(mapf[i + 1])
+    jpeg(mapf[i + 1])
     maps::map(wmap, xlim = xlim, ylim = ylim, col = "gray80", fill = TRUE)
     title(main = title[i])
-    graphics::points(Dt[,3], Dt[,2], pch = Ty, col = Cr, bg = Bg, cex = 0.4 * S + 0.9, lwd = 2)
+    points(Dt[,3], Dt[,2], pch = Ty, col = Cr, bg = Bg, cex = 0.4 * S + 0.9, lwd = 2)
     
     # Legend only shows the filled triangles
     # Consider the text size 'cex'
@@ -380,8 +379,8 @@ p5_trends_graphs <- function(a2, station, a2_year, month, a4, a4_year, a4_month,
     n1 <- c(Inf, 2:-2)
     n2 <- c(2:-2, -Inf)
     lT <- paste(n2 * multiple[i], "< x <", n1 * multiple[i])
-    graphics::legend("topleft", legend = lT, title = uts[i], pch = Ty, col = Cr, pt.cex = S, cex = 0.8, pt.bg = Cr)
-    grDevices::dev.off()
+    legend("topleft", legend = lT, title = uts[i], pch = Ty, col = Cr, pt.cex = S, cex = 0.8, pt.bg = Cr)
+    dev.off()
   }
   
   ###################################################################################
@@ -429,10 +428,6 @@ p5_trends_graphs <- function(a2, station, a2_year, month, a4, a4_year, a4_month,
                     NA_real_, "?", NA_real_, "?", NA_real_, "?", NA_real_, "?",
                     NA_real_, "?",
                     stringsAsFactors = FALSE)
-    
-    month_name_english <- c("January", "February", "March", "April", "May", "June", "July", 
-                            "August", "September", "October", "November", "December")
-    
     cnames <- c(month_name_english, "Annual")
     names(X) <- c("NCMP", as.vector(t(matrix(c(cnames, paste(cnames, "S", sep = "_")), ncol = 2))))
     
@@ -440,7 +435,7 @@ p5_trends_graphs <- function(a2, station, a2_year, month, a4, a4_year, a4_month,
     
     # Read in regional average data for all months for this index
     
-    In <- a4 %>% dplyr::filter(ncmp_index == ele[i])
+    In <- a4 %>% filter(ncmp_index == ele[i])
     if (nrow(In) == 0) cat("Regional average has not yet been calculated for ", ele[i], "in A4 - skipping", fill = TRUE)
     
     trend <- rep(NA, 13)  # store monthly estimated trend over period
@@ -471,7 +466,7 @@ p5_trends_graphs <- function(a2, station, a2_year, month, a4, a4_year, a4_month,
     
     X_trend <- tidyr::pivot_longer(X, cols = seq(2, 26, 2), names_to = "month",
                                    values_to = "trend")
-    X_trend <- X_trend %>% dplyr::select(NCMP, month, trend)
+    X_trend <- X_trend %>% select(NCMP, month, trend)
     X_pvalue <- tidyr::pivot_longer(X, cols = seq(3, 27, 2), names_to = "month",
                                     values_to = "signif")
     X <- X_trend
@@ -482,7 +477,7 @@ p5_trends_graphs <- function(a2, station, a2_year, month, a4, a4_year, a4_month,
     # Plot annual series and trend
     # These are preserved as the last index in the loop (j == 13)
     
-    grDevices::pdf(namep[i])
+    pdf(namep[i])
     if (!is.na(ymin[i])) {
       ylim <- c(ymin[i], ymax[i])
     } else {
@@ -492,10 +487,10 @@ p5_trends_graphs <- function(a2, station, a2_year, month, a4, a4_year, a4_month,
     plot(In[ref, a4_year],In[ref, 'Index'], type = "l", col = "Blue", ylim = ylim, yaxs = "i",
          xlab = "Year", ylab = ylabel[i], main = title[i], las = 1)
     if (!is.na(trend[j])) {  # Add trend line if calculated
-      graphics::abline(q[c("intercept","trend")], col = "Red", lty = 2)
+      abline(q[c("intercept","trend")], col = "Red", lty = 2)
       #    abline(q[,1],col="Red",lty=2)
     }
-    grDevices::dev.off()
+    dev.off()
   }
   X <- dplyr::bind_rows(region_trends_out, .id = "ncmp_index")
   output_data[[paste(tname, "Trends", nyb, nye, "Region", "Avg", sep = "_")]] <- X

@@ -53,7 +53,7 @@ p5_trends_graphs(
 
 \item{station_df}{data.frame will station metadata}
 
-\item{name}{name of station column in station_df (to link with a2)}
+\item{name}{name of station column in station_df (to link with a2[\link{station}])}
 
 \item{lat}{name of latitude column in station_df}
 
@@ -74,9 +74,8 @@ It produces a map of each of these trends by station.
 }
 \examples{
 # Example usage of 'p5_trends_graphs':
-# p5_trends_graphs(a2, station = "StationID", a2_year = "Year", month = "Month",
-#                  a4, a4_year = "Year", a4_month = "Month",ne = 1:8, nyba = 1950,
-#                  nyea = 2020, nyb = 1960, nye = 2020, ncmp_folder = "output_folder",
+# p5_trends_graphs(a2, station = "StationID", a2_year = "Year", month = "Month", a4, a4_year = "Year", a4_month = "Month",
+#                ne = 1:8, nyba = 1950, nyea = 2020, nyb = 1960, nye = 2020, ncmp_folder = "output_folder",
 #                station_df, name = "StationName", lat = "Latitude", lon = "Longitude")
 
 }

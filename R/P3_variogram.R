@@ -31,10 +31,8 @@
 #' 
 #' @examples
 #' # Example usage of p3_variogram:
-#' # Assuming 'a2', 'station', 'year', 'month', 'station_df', 'name', 'lat', 
-#' #            'lon', and 'ncmp_folder' are defined.
-#' # result <- p3_variogram(a2, station, year, month, nyb = 1981, nye = 2010, 
-#' #  ne = 1:8,station_df, name, lat, lon, ncmp_folder)
+#' # Assuming 'a2', 'station', 'year', 'month', 'station_df', 'name', 'lat', 'lon', and 'ncmp_folder' are defined.
+#' # result <- p3_variogram(a2, station, year, month, nyb = 1981, nye = 2010, ne = 1:8,station_df, name, lat, lon, ncmp_folder)
 #'
 #' @references 
 #' For the original source code and more information, please refer to: \href{https://github.com/ET-NCMP/NCMP}{ET-NCMP/NCMP}
@@ -81,9 +79,6 @@ p3_variogram <- function(a2, station, year, month, nyb = 1981, nye = 2010, ne = 
   
   # Column names of the possible indices to select i.e. ele[ne]
   ele <- c("TMA", "PrAn", "PrA", "SPI", "TX90p", "TN90p", "TX10p", "TN10p") # NCMP index element
-  
-  month_name_english <- c("January", "February", "March", "April", "May", "June", "July", 
-                          "August", "September", "October", "November", "December")
   
   # Output column names (now standard across CSV files)
   cnames <- c(month_name_english, "Annual")
@@ -185,7 +180,7 @@ p3_variogram <- function(a2, station, year, month, nyb = 1981, nye = 2010, ne = 
         I12v <- I12[,.SD[is.element(Year,yrs)]]
         I12vd <- I12v[,cxnames,with = FALSE] - I12v[, cynames, with = FALSE]
         names(I12vd) <- cnames  # consistency with bin data.table
-        Y[[L[i,j]]] <- rbind(Y[[L[i,j]]], cbind(I12v[,list(Year)], I12vd))
+        Y[[L[i,j]]] <- rbind(Y[[L[i,j]]], cbind(I12v[,.(Year)], I12vd))
       }
     } 
     nrec <- sapply(Y, nrow)  # Number of records in each bin 
@@ -204,8 +199,8 @@ p3_variogram <- function(a2, station, year, month, nyb = 1981, nye = 2010, ne = 
     # Set specifications for graphs
     # These will be plotted on a single page - have modified the margins
     
-    grDevices::pdf(file.path(a3_folder, paste("NCMP", ele[e], "Graph.pdf")))
-    graphics::par(mfrow=c(5,3),mar=c(2.5,4,1.5,0.5)+0.1,cex=0.5,mgp=c(1.5,0.4,0),tcl=-0.2)
+    pdf(file.path(a3_folder, paste("NCMP", ele[e], "Graph.pdf")))
+    par(mfrow=c(5,3),mar=c(2.5,4,1.5,0.5)+0.1,cex=0.5,mgp=c(1.5,0.4,0),tcl=-0.2)
     
     for (nm in 1:13) {
       
@@ -241,31 +236,31 @@ p3_variogram <- function(a2, station, year, month, nyb = 1981, nye = 2010, ne = 
       
       n0 <- max(0.01, 0.95 * min(Bl[1:as.integer(.2 * nbin)], na.rm = TRUE)) 
       sm <- max(Bl[as.integer(.8 * nbin):nbin], na.rm = TRUE)
-      s1 <- stats::median(Bl[as.integer(.6 * nbin):(as.integer(.8 * nbin) - 1L)], na.rm = TRUE)
-      s2 <- stats::median(Bl[as.integer(.8 * nbin):nbin], na.rm = TRUE)
-      s0 <- stats::median(Bl[as.integer(.6 * nbin):nbin], na.rm = TRUE)
+      s1 <- median(Bl[as.integer(.6 * nbin):(as.integer(.8 * nbin) - 1L)], na.rm = TRUE)
+      s2 <- median(Bl[as.integer(.8 * nbin):nbin], na.rm = TRUE)
+      s0 <- median(Bl[as.integer(.6 * nbin):nbin], na.rm = TRUE)
       plower <- c(r = 100, s = 0.5 * s0)
       pupper <- c(r = 3 * Dmax, s = sm)
       
       # Gaussian
       clist <- list(r = Dmax, s = sm)
-      mod1 <- stats::nls(Bl ~ Gaussian(Dl, 0, r, s), start = clist,
+      mod1 <- nls(Bl ~ Gaussian(Dl, 0, r, s), start = clist,
                   algorithm = "port", lower = plower, upper = pupper,
-                  control = stats::nls.control(warnOnly = TRUE, maxiter = 100))
-      cmod1 <- stats::coef(mod1)
+                  control = nls.control(warnOnly = TRUE, maxiter = 100))
+      cmod1 <- coef(mod1)
       
       # Exponential - same start values as Gaussian
-      mod2 <- stats::nls(Bl ~ Exponential(Dl, 0, r, s), start = clist,
+      mod2 <- nls(Bl ~ Exponential(Dl, 0, r, s), start = clist,
                   algorithm = "port", lower = plower, upper = pupper,
-                  control = stats::nls.control(warnOnly = TRUE, maxiter = 100))
-      cmod2 <- stats::coef(mod2)
+                  control = nls.control(warnOnly = TRUE, maxiter = 100))
+      cmod2 <- coef(mod2)
       
       # Spherical
       clist <- list(r = 0.5 * Dmax, s = s0)
-      mod3 <- stats::nls(Bl ~ Spherical(Dl, 0, r, s), start = clist,
+      mod3 <- nls(Bl ~ Spherical(Dl, 0, r, s), start = clist,
                   algorithm = "port", lower = plower, upper = pupper,
-                  control = stats::nls.control(warnOnly = TRUE, maxiter = 100))
-      cmod3 <- stats::coef(mod3)
+                  control = nls.control(warnOnly = TRUE, maxiter = 100))
+      cmod3 <- coef(mod3)
       
       # Copy fitted coefficients to n,r and s
       # Only constrain n if not using 'port' algorithm,
@@ -294,7 +289,7 @@ p3_variogram <- function(a2, station, year, month, nyb = 1981, nye = 2010, ne = 
       # Plot binned data and best fit variogram
       plot(Dl, Bl, xlim = c(0, 1.05 * Dmax), xaxs = "i", ylim = c(0.0, 1.05 * max(Bl, na.rm = TRUE)), yaxs = "i",
            xlab = "Distance", ylab = "Diff in Index", col = "Blue")
-      graphics::title(cnames[nm], line = 0.5)
+      title(cnames[nm], line = 0.5)
       
       # Plot all fits in green (commented out but handy for debugging)
       #  curve(get(Graph[1])(x,n[1],r[1],s[1]),col="green",add=TRUE)
@@ -302,7 +297,7 @@ p3_variogram <- function(a2, station, year, month, nyb = 1981, nye = 2010, ne = 
       #  curve(get(Graph[3])(x,n[3],r[3],s[3]),col="green",add=TRUE)
       
       # Highlight best fit in red
-      graphics::curve(get(Graph[k])(x, n[k], r[k], s[k]), 0, Dmax, col = "red", add = TRUE)
+      curve(get(Graph[k])(x, n[k], r[k], s[k]), 0, Dmax, col = "red", add = TRUE)
       
       # Default Spherical in black - but this function may not be the best for the data
       # This is not currently used in the decision process, so is commented out full 
@@ -311,7 +306,7 @@ p3_variogram <- function(a2, station, year, month, nyb = 1981, nye = 2010, ne = 
       #  curve(Spherical(x,clist$n,clist$r,clist$s),0,Dmax,col="black",lwd=0.5,add=TRUE)
       
     }
-    grDevices::dev.off()  # Close PDF file
+    dev.off()  # Close PDF file
     
     ###################################################################################
     # End loop of months                                                              #

@@ -123,10 +123,6 @@ p6_count_records <- function(a2, station, a2_year, month, a4, nyb, nye,
   
   Yrc <- nyb:nye  # vector of record count period years
   cYrc <- as.character(Yrc)
-  
-  month_name_english <- c("January", "February", "March", "April", "May", "June", "July", 
-                          "August", "September", "October", "November", "December")
-  
   cnames <- c(month_name_english, "Annual")  # only used internally
   output_data <- list()
   for (ne in 1:5) {

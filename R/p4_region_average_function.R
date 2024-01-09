@@ -49,7 +49,7 @@ p4_region_average <- function(a2, station, year, month, a3, ne = 1:8,
                               nyb = 1950, nye, uncode, label, res,
                               igrid = FALSE) {
   
-  utils::data(package = "maptools", wrld_simpl)
+  data(package = "maptools", wrld_simpl)
   
   ###################################################################################
   # Set variables with key thresholds for region averages                           #
@@ -256,7 +256,7 @@ p4_region_average <- function(a2, station, year, month, a3, ne = 1:8,
     ###################################################################################
     #    Read variogram:                                                              #
     ###################################################################################
-    var <- a3 %>% dplyr::filter(ncmp_index == ele[e])
+    var <- a3 %>% filter(ncmp_index == ele[e])
     
     ###################################################################################
     #    Read index data for all stations:                                            #
@@ -349,7 +349,7 @@ p4_region_average <- function(a2, station, year, month, a3, ne = 1:8,
           Ix <- t(d[iobs]) %*% Cinv %*% F[iobs,]     # Matrix multiplication
           if (e == 2L) Ix <- Ix * 100 # If prec anom ratio (and prec anom?) multiply by 100
           if (e == 3L) Ix <- Ix * 100 # scale PrA so that matrix inversion works
-          NCMP[z, nm] <- stats::weighted.mean(Ix, Dsq[sqs, 8]) # Find area average - no NA
+          NCMP[z, nm] <- weighted.mean(Ix, Dsq[sqs, 8]) # Find area average - no NA
         } else {                      # No contributing stations
           Ix <- rep(NA, length(sqs))  # Set all grid sqs to missing
           NCMP[z, nm] <- NA   # Make it clear regional av is also missing

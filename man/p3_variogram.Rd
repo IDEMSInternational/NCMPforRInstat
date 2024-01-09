@@ -60,10 +60,8 @@ information about the variogram models fitted to the data.
 }
 \examples{
 # Example usage of p3_variogram:
-# Assuming 'a2', 'station', 'year', 'month', 'station_df', 'name', 'lat', 
-#            'lon', and 'ncmp_folder' are defined.
-# result <- p3_variogram(a2, station, year, month, nyb = 1981, nye = 2010, 
-#  ne = 1:8,station_df, name, lat, lon, ncmp_folder)
+# Assuming 'a2', 'station', 'year', 'month', 'station_df', 'name', 'lat', 'lon', and 'ncmp_folder' are defined.
+# result <- p3_variogram(a2, station, year, month, nyb = 1981, nye = 2010, ne = 1:8,station_df, name, lat, lon, ncmp_folder)
 
 }
 \references{

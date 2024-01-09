@@ -129,10 +129,10 @@ p7_summary <- function(a2, a4, a6, nyb, nye, ncmp_folder) {
     # The Guidance implies rounding to 2dp, but the annual extraction is to 3dp
     # Allowing for extra columns, e.g. planned station index of record counts
     if (ne <= 6) {
-      In <- a4 %>% dplyr::filter(ncmp_index == ele[ne])
+      In <- a4 %>% filter(ncmp_index == ele[ne])
       In$ncmp_index <- NULL
     } else {
-      In <- a6 %>% dplyr::filter(ncmp_index == ele[ne])
+      In <- a6 %>% filter(ncmp_index == ele[ne])
       In$region <- NULL
       In$ncmp_index <- NULL
       # Remove Count Accum column
@@ -172,7 +172,7 @@ p7_summary <- function(a2, a4, a6, nyb, nye, ncmp_folder) {
   namex <- paste(tname, nyb, nye, "Summary.csv", sep = "_")
   namex <- file.path(ncmp_folder, namex)
   writeLines(mess, con = namex)
-  utils::write.table(X[ind,], file = namex, append = TRUE, row.names = FALSE, sep = ",")
+  write.table(X[ind,], file = namex, append = TRUE, row.names = FALSE, sep = ",")
   X <- dplyr::arrange(X, Year, Month)
   return(X)
 }
